@@ -1,13 +1,13 @@
 // Dependency imports
 import React, {Component} from 'react';
-import axios from 'axios';
 import {connect} from 'react-redux';
 
 // Component imports
 import Form from '../../components/Form/Form';
+import ColorPicker from '../../components/ColorPicker/ColorPicker';
 
 // Asset imports
-import classes from './Home.css';
+import classes from './Index.css';
 
 // Component
 class Home extends Component{
@@ -20,9 +20,11 @@ class Home extends Component{
                 </div>
             )
         }else if(!this.props.message && this.props.loading){
-            <div className={classes.MessageContainer}>
-                Loading...
-            </div>            
+            return(
+                <div className={classes.MessageContainer}>
+                    Connecting to server...
+                </div>
+            )
         }else{
             return null;
         }
@@ -30,12 +32,17 @@ class Home extends Component{
 
     render(){
         return(
-            <div className={classes.MainContainer}>
-                <div className={classes.FormContainer}>
-                    <Form/>
-                </div>
-                {this.displayMessage()}
-            </div>
+            <React.Fragment>
+                <ColorPicker/>
+                
+                <div className={classes.MainContainer}>
+                    <div className={classes.FormContainer}>
+                        <Form/>
+                    </div>
+                    {this.displayMessage()}
+                </div>   
+                             
+            </React.Fragment>
         )
     }
 }

@@ -6,6 +6,7 @@ import classes from './Input.css';
 
 // Component
 const input = (props) => {
+
     switch(props.type){
         case('text'):
             return(

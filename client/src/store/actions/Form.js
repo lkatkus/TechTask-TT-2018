@@ -18,3 +18,11 @@ export const messageRequestFailed = () => {
         type: actions.MESSAGE_REQUEST_FAILED
     }
 };
+
+export const setContainerSize = (position) => {
+    return{
+        type: actions.SET_CONTAINER,
+        position
+    }
+};
+
