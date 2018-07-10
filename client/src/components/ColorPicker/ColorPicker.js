@@ -1,6 +1,6 @@
 // Dependency imports
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 // Component imports
 import Color from './Color/Color';
@@ -10,8 +10,8 @@ import * as actions from '../../store/actions/ColorPicker';
 import classes from './ColorPicker.css'
 
 // Component
-class ColorPicker extends Component{
-    
+class ColorPicker extends Component {
+
     state = {
         draging: false,
         dragedObject: {
@@ -25,27 +25,39 @@ class ColorPicker extends Component{
 
     pickedColor = null;
 
-    componentDidMount(){
+    componentDidMount() {
         document.addEventListener('mousemove', (event) => {
-            if(this.state.draging){
+            if (this.state.draging) {
+                // Set dragged object position
                 this.pickedColor.style.left = (event.clientX - 25) + 'px';
                 this.pickedColor.style.top = (event.clientY - 25) + 'px';
             };
         });
     };
 
-    updateState = (event) => {
-        if(event.clientX > this.props.dropContainer.left && event.clientX < this.props.dropContainer.right &&
-            event.clientY > this.props.dropContainer.top && event.clientY < this.props.dropContainer.bottom){
+    mouseUpHandler = (event) => {
+        this.props.onDragEnd();
+
+        // Check if dragged object is over dropContainer
+        if (event.clientX > this.props.dropContainer.left && event.clientX < this.props.dropContainer.right &&
+            event.clientY > this.props.dropContainer.top && event.clientY < this.props.dropContainer.bottom) {
+                // Set dropContainer color if color picked
                 this.props.onColorPick(this.state.dragedObject.id);
         }
 
-        this.setState({draging: false}, () => {
-            document.removeEventListener('mouseup', this.updateState);
+        // Reset dragged object position
+        this.pickedColor.style.position = '';
+        this.pickedColor.style.left = '0px';
+        this.pickedColor.style.top = '0px';
+
+        this.setState({ draging: false }, () => {
+            document.removeEventListener('mouseup', this.mouseUpHandler);
         });
     };
 
     mouseDownHandler = (event) => {
+        this.props.onDragStart();
+
         this.pickedColor = document.getElementById(event.target.id);
         this.pickedColor.style.position = 'absolute';
 
@@ -53,13 +65,14 @@ class ColorPicker extends Component{
             draging: true,
             dragedObject: {
                 id: event.target.id
-            }}, () => {
-            document.addEventListener('mouseup', this.updateState);
+            }
+        }, () => {
+            document.addEventListener('mouseup', this.mouseUpHandler);
         });
     };
- 
-    render(){
-        return(
+
+    render() {
+        return (
             <div className={classes.ColorPicker}>
                 <Color type="red" mouseDown={this.mouseDownHandler} />
                 <Color type="green" mouseDown={this.mouseDownHandler} />
@@ -70,14 +83,16 @@ class ColorPicker extends Component{
 };
 
 const mapStateToProps = state => {
-    return{
+    return {
         dropContainer: state.dropContainer
     }
 }
 
 const mapDispatchToState = dispatch => {
-    return{
-        onColorPick: (pickedColor) => dispatch(actions.setColor(pickedColor))
+    return {
+        onColorPick: (pickedColor) => dispatch(actions.setColor(pickedColor)),
+        onDragStart: () => dispatch(actions.dragStart()),
+        onDragEnd: () => dispatch(actions.dragEnd()),
     }
 }
 

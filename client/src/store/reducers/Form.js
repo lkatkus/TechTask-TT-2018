@@ -4,6 +4,7 @@ const initialState = {
     message: null,
     loading: false,
     pickedColor: null,
+    dragging: false,
     dropContainerPosition: {}
 }
 
@@ -36,6 +37,16 @@ const reducer = (state = initialState, action) => {
             return{
                 ...state,
                 dropContainer: action.position
+            }
+        case(actionTypes.DRAG_START):
+            return{
+                ...state,
+                dragging: true
+            }
+        case(actionTypes.DRAG_END):
+            return{
+                ...state,
+                dragging: false
             }            
     }
     return state;

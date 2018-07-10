@@ -6,3 +6,15 @@ export const setColor = (pickedColor) => {
         pickedColor
     }
 };
+
+export const dragStart = () => {
+    return{
+        type: actions.DRAG_START
+    }
+};
+
+export const dragEnd = () => {
+    return{
+        type: actions.DRAG_END
+    }
+};

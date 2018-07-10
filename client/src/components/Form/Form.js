@@ -61,7 +61,7 @@ class Form extends Component{
 
         this.props.onMessageRequestSent();
 
-        axios.post('http://localhost:3000/', userData)
+        axios.post('https://rocky-dawn-89543.herokuapp.com', userData)
         .then((res) => {
             this.props.onMessageReceived(res.data);
         })
@@ -71,8 +71,20 @@ class Form extends Component{
     };
 
     render(){
+
+        let dropContainerStyle = {};
+        if(this.props.dragging && !this.props.pickedColor){
+            dropContainerStyle = {
+                backgroundColor: '#f0f0f0'
+            }
+        }else if(this.props.pickedColor){
+            dropContainerStyle = {
+                backgroundColor: this.props.pickedColor
+            }
+        }
+
         return(
-            <form id='dropContainer' onSubmit={this.submitFormHandler} style={{backgroundColor:this.props.pickedColor}}>
+            <form id='dropContainer' onSubmit={this.submitFormHandler} style={dropContainerStyle}>
                 <Input type="text" name="username" label="Username" onChange={this.changeHandler} required/>
                 <Input type="email" label="E-mail address" onChange={this.changeHandler} required/>
                 <Input type="submit"/>
@@ -85,7 +97,8 @@ const mapStateToProps = state => {
     return{
         message: state.message,
         loading: state.loading,
-        pickedColor: state.pickedColor
+        pickedColor: state.pickedColor,
+        dragging: state.dragging
     };
 };
 

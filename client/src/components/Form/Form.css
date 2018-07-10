@@ -1,3 +1,5 @@
 form{
-    padding: 20px;
+    padding: 50px;
+    border:1px solid #e6e6e6;
+    transition: all 0.2s;
 }
